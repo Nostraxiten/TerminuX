@@ -82,9 +82,74 @@ install_nano() {
     c_ok "~/.nanorc generated."
 }
 
+configure_prompt_user() {
+    local username="nox"
+    local requested_username
+
+    while true; do
+        printf 'Prompt username [nox]: '
+        IFS= read -r requested_username || requested_username=""
+        username="${requested_username:-nox}"
+        if [[ "$username" =~ ^[[:alnum:]_.-]{1,10}$ ]]; then
+            break
+        fi
+        c_warn "Use 1 to 10 characters: letters, numbers, '.', '_' or '-'."
+    done
+
+    printf '%s\n' "$username" > "$NOXMOD_HOME/user-name"
+    c_ok "Prompt username set to: $username"
+}
+
+configure_prompt_host() {
+    local hostname="termux"
+    local requested_hostname
+
+    while true; do
+        printf 'Prompt host [termux]: '
+        IFS= read -r requested_hostname || requested_hostname=""
+        hostname="${requested_hostname:-termux}"
+        if [ "${#hostname}" -ge 1 ] && [ "${#hostname}" -le 10 ]; then
+            break
+        fi
+        c_warn "Use between 1 and 10 characters."
+    done
+
+    printf '%s\n' "$hostname" > "$NOXMOD_HOME/host-name"
+    c_ok "Prompt host set to: $hostname"
+}
+
+configure_prompt_ip() {
+    local show_ip="yes"
+    local requested_show_ip
+
+    while true; do
+        printf 'Show private IP in prompt? [Y/n]: '
+        IFS= read -r requested_show_ip || requested_show_ip=""
+        case "${requested_show_ip:-y}" in
+            y|Y|yes|YES|Yes)
+                show_ip="yes"
+                break
+                ;;
+            n|N|no|NO|No)
+                show_ip="no"
+                break
+                ;;
+            *)
+                c_warn "Answer yes or no."
+                ;;
+        esac
+    done
+
+    printf '%s\n' "$show_ip" > "$NOXMOD_HOME/show-ip"
+    c_ok "Private IP display: $show_ip"
+}
+
 install_prompt() {
     c_info "Installing visual prompt (user + private IP + git + automatic clear)..."
     mkdir -p "$NOXMOD_HOME"
+    configure_prompt_user
+    configure_prompt_host
+    configure_prompt_ip
     cp "$SCRIPT_DIR/prompt.sh" "$NOXMOD_HOME/prompt.sh"
     chmod +x "$NOXMOD_HOME/prompt.sh"
 

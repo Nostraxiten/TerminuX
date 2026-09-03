@@ -17,6 +17,20 @@ NOXMOD_IP='\[\e[1;33m\]'       # amarillo: IP privada
 NOXMOD_PATH='\[\e[1;34m\]'     # azul: ruta actual
 NOXMOD_GIT='\[\e[0;35m\]'      # magenta: rama git
 NOXMOD_ARROW='\[\e[1;37m\]'    # blanco brillante: símbolo de entrada
+NOXMOD_USER_NAME="${USER:-user}"
+if [ -f "$HOME/.noxmod/user-name" ]; then
+    IFS= read -r NOXMOD_USER_NAME < "$HOME/.noxmod/user-name"
+fi
+[ -n "$NOXMOD_USER_NAME" ] || NOXMOD_USER_NAME="${USER:-user}"
+NOXMOD_HOST_NAME="termux"
+if [ -f "$HOME/.noxmod/host-name" ]; then
+    IFS= read -r NOXMOD_HOST_NAME < "$HOME/.noxmod/host-name"
+fi
+[ -n "$NOXMOD_HOST_NAME" ] || NOXMOD_HOST_NAME="termux"
+NOXMOD_SHOW_IP="yes"
+if [ -f "$HOME/.noxmod/show-ip" ]; then
+    IFS= read -r NOXMOD_SHOW_IP < "$HOME/.noxmod/show-ip"
+fi
 
 # --- IP privada de la Wi-Fi (evita coger la de datos móviles: ccmni*, rmnet*, pdp*) ---
 # IMPORTANTE: en Android, pedir la interfaz por nombre directamente (p.ej.
@@ -72,10 +86,14 @@ noxmod_get_git_branch() {
 
 # --- Construye el prompt en cada línea nueva ---
 noxmod_set_prompt() {
-    local ip branch
-    ip=$(noxmod_get_ip)
+    local ip branch ip_segment
     branch=$(noxmod_get_git_branch)
-    PS1="${NOXMOD_BOX}┌─[${NOXMOD_USER}\u@termux${NOXMOD_BOX}]─[${NOXMOD_IP}${ip}${NOXMOD_BOX}]─[${NOXMOD_PATH}\w${NOXMOD_GIT}${branch}${NOXMOD_BOX}]${NOXMOD_RESET}\n${NOXMOD_BOX}└──${NOXMOD_ARROW}>${NOXMOD_RESET} "
+    ip_segment=""
+    if [ "$NOXMOD_SHOW_IP" = "yes" ]; then
+        ip=$(noxmod_get_ip)
+        ip_segment="─[${NOXMOD_IP}${ip}${NOXMOD_BOX}]"
+    fi
+    PS1="${NOXMOD_BOX}┌─[${NOXMOD_USER}${NOXMOD_USER_NAME}@${NOXMOD_HOST_NAME}${NOXMOD_BOX}]${ip_segment}─[${NOXMOD_PATH}\w${NOXMOD_GIT}${branch}${NOXMOD_BOX}]${NOXMOD_RESET}\n${NOXMOD_BOX}└──${NOXMOD_ARROW}>${NOXMOD_RESET} "
 }
 
 PROMPT_COMMAND=noxmod_set_prompt

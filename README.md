@@ -35,6 +35,11 @@ Enhanced `nano`, extra shell keys, and a clean Kali-style prompt with private IP
   excluding mobile data interfaces (`ccmni*`, `rmnet*`, `pdp*`) to avoid displaying
   the carrier's IP by mistake.
 
+  During installation, you can choose the username shown in the prompt. The default
+  is `nox`; it accepts 1 to 10 letters, numbers, `.`, `_`, or `-`.
+  You can also choose the text shown after `@` (default: `termux`, 1 to 10 characters)
+  and decide whether to show the private IP (default: yes).
+
 ## Installation
 
 ### Quick installation
