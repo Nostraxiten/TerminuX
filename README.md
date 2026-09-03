@@ -23,8 +23,9 @@ screen automatically once, rather than after every command.
 
 - **Color theme** (`~/.termux/colors.properties`): dark "Nightwire"-style palette
   (background `#1a1b26`, cyan/green/yellow accents), easy on the eyes.
-- **Extra keys** (`~/.termux/termux.properties`): a row with `> < | && ; ~` \` so you
-  do not have to rely on the regular touchscreen keyboard when writing commands or code.
+- **Extra keys** (`~/.termux/termux.properties`): rows with `KEYBOARD`, navigation keys,
+  and `> < | && ; ~` \` so you can show the touchscreen keyboard again while writing
+  commands or code.
 - **Enhanced nano** (`~/.nanorc`): line numbers, automatic indentation, interface colors,
   and syntax highlighting for dozens of languages through the
   [scopatz/nanorc](https://github.com/scopatz/nanorc) repository.

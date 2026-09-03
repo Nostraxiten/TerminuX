@@ -4,7 +4,6 @@ set linenumbers
 set constantshow
 set autoindent
 set tabsize 4
-set mouse
 set softwrap
 set indicator
 
