@@ -90,7 +90,7 @@ no prompt, and no extra keys).
 ```
 TerminuX/
 ├── noxtermux.sh           # installer (bash noxtermux.sh)
-├── default.sh              # reset to default state (bash default.sh)
+├── default.sh             # reset to default state (bash default.sh)
 ├── colors.properties      # terminal color palette
 ├── termux.properties      # extra keys row
 ├── nano-options.nanorc    # nano visual options
