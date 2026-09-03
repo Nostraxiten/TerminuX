@@ -37,10 +37,20 @@ Enhanced `nano`, extra shell keys, and a clean Kali-style prompt with private IP
 
 ## Installation
 
+### Quick installation
+
+Copy and paste this entire command into Termux:
+
+```bash
+cd "$HOME" && pkg update -y && pkg install -y git && git clone https://github.com/Nostraxiten/TerminuX.git && cd TerminuX && bash noxtermux.sh && source ~/.bashrc
+```
+
+### From an extracted project
+
 With the project extracted, run one command (`chmod` is not required):
 
 ```bash
-cd noxmod-termux
+cd TerminuX
 bash noxtermux.sh
 source ~/.bashrc
 ```
@@ -66,7 +76,7 @@ no prompt, and no extra keys).
 ## Project Structure
 
 ```
-noxmod-termux/
+TerminuX/
 ├── noxtermux.sh           # installer (bash noxtermux.sh)
 ├── default.sh              # reset to default state (bash default.sh)
 ├── colors.properties      # terminal color palette
