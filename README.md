@@ -58,11 +58,7 @@ cd "$HOME" && pkg update -y && pkg install -y git && git clone https://github.co
 
 With the project extracted, run one command (`chmod` is not required):
 
-```bash
-cd TerminuX
-bash noxtermux.sh
-source ~/.bashrc
-```
+<img width="412" height="205" alt="image" src="https://github.com/user-attachments/assets/a25fc698-0c45-43b7-be1f-68f7643297d9" />
 
 `noxtermux.sh` automatically backs up your existing `colors.properties`,
 `termux.properties`, `.nanorc`, and `.bashrc` to `~/.noxmod-backups/<date>/`
@@ -81,6 +77,8 @@ source ~/.bashrc
 Restores the latest backup saved by `noxtermux.sh` and removes the block added to
 `~/.bashrc`. If no backup exists, it restores Termux to its default state (no theme,
 no prompt, and no extra keys).
+
+<img width="1080" height="360" alt="image" src="https://github.com/user-attachments/assets/e5e037d2-0837-4e3e-ab29-f9ebe18aa946" />
 
 ## Project Structure
 
