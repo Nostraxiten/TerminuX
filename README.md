@@ -1,6 +1,6 @@
 <div align="center">
 
-# NoxMod for Termux
+# TerminuX
 
 **A Nightwire-inspired terminal customization for Termux on Android.**  
 Enhanced `nano`, extra shell keys, and a clean Kali-style prompt with private IP and git context.
