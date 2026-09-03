@@ -1,0 +1,21 @@
+# === NoxMod: opciones de nano ===
+# Interfaz general
+set linenumbers
+set constantshow
+set autoindent
+set tabsize 4
+set mouse
+set softwrap
+set indicator
+
+# Colores de la interfaz (requiere nano >= 4)
+set titlecolor brightwhite,cyan
+set statuscolor brightwhite,green
+set numbercolor cyan
+set keycolor brightcyan
+set functioncolor green
+set selectedcolor black,cyan
+set spotlightcolor black,yellow
+set errorcolor brightwhite,red
+set stripecolor ,brightblack
+# === Fin opciones NoxMod ===
