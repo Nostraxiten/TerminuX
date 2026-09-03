@@ -20,7 +20,8 @@ Enhanced `nano`, extra shell keys, and a clean Kali-style prompt with private IP
 <div align="center">
 
 </div>
-## What It Installs
+
+<h2>What It Installs</h2>
 
 - **Color theme** (`~/.termux/colors.properties`): dark "Nightwire"-style palette
   (background `#1a1b26`, cyan/green/yellow accents), easy on the eyes.
