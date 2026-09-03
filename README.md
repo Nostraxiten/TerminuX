@@ -14,7 +14,9 @@ Enhanced `nano`, extra shell keys, and a clean Kali-style prompt with private IP
 
 </div>
 
+<div align="center">
 <img width="436" height="166" alt="Captura de pantalla 2026-09-03 074223" src="https://github.com/user-attachments/assets/fb0d61a2-1bd9-46d8-9ebd-026084a8c3ee" />
+</div>
 
 ## What It Installs
 
@@ -28,7 +30,9 @@ Enhanced `nano`, extra shell keys, and a clean Kali-style prompt with private IP
   [scopatz/nanorc](https://github.com/scopatz/nanorc) repository.
 - **Prompt + automatic clear** (`~/.noxmod/prompt.sh`, loaded from `~/.bashrc`):
 
+<div align="center">
 <img width="407" height="67" alt="Captura de pantalla 2026-09-03 074231" src="https://github.com/user-attachments/assets/78b9b0d6-6232-4355-90e4-512560e1a20f" />
+</div>
 
   The screen is cleared automatically when opening Termux. The IP is taken from
   `wlan0` (Wi-Fi); if no Wi-Fi is connected, it looks for another interface while
