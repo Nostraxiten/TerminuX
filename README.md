@@ -1,35 +1,48 @@
-# NoxMod para Termux
+<div align="center">
 
-Mod visual únicamente para **Termux** (Android). Cambia el tema de color, mejora `nano`
-con resaltado de sintaxis y números de línea, y sustituye el prompt por uno estilo
-Kali con tu usuario, tu IP privada (Wi-Fi) y la rama de git (si aplica), rematado
-en `>`. Al abrir una sesión nueva, limpia la pantalla automáticamente (solo una
-vez al entrar, no en cada comando).
+# NoxMod for Termux
 
-## Qué instala
+**A Nightwire-inspired terminal customization for Termux on Android.**  
+Enhanced `nano`, extra shell keys, and a clean Kali-style prompt with private IP and git context.
 
-- **Tema de color** (`~/.termux/colors.properties`): paleta oscura tipo "Nightwire"
-  (fondo `#1a1b26`, acentos cian/verde/amarillo), suave para la vista.
-- **Teclas extra** (`~/.termux/termux.properties`): fila con `> < | && ; ~` \` para
-  no depender del teclado táctil normal al escribir comandos o código.
-- **nano mejorado** (`~/.nanorc`): números de línea, indentado automático, colores
-  de interfaz, y resaltado de sintaxis para decenas de lenguajes vía el repo
-  [scopatz/nanorc](https://github.com/scopatz/nanorc).
-- **Prompt + clear automático** (`~/.noxmod/prompt.sh`, cargado desde `~/.bashrc`):
+<hr>
+
+![Platform](https://img.shields.io/badge/PLATFORM-TERMUX%20%7C%20ANDROID-00d9e8?style=flat-square)
+![Shell](https://img.shields.io/badge/SHELL-BASH-7aa2f7?style=flat-square)
+[![License](https://img.shields.io/badge/LICENSE-MIT-9ece6a?style=flat-square)](LICENSE)
+![Status](https://img.shields.io/badge/STATUS-ACTIVE-f7768e?style=flat-square)
+
+</div>
+
+NoxMod changes the color theme, improves `nano` with syntax highlighting and line numbers,
+and replaces the prompt with a Kali-style prompt showing your username, private IP (Wi-Fi),
+and git branch when applicable, ending in `>`. When opening a new session, it clears the
+screen automatically once, rather than after every command.
+
+## What It Installs
+
+- **Color theme** (`~/.termux/colors.properties`): dark "Nightwire"-style palette
+  (background `#1a1b26`, cyan/green/yellow accents), easy on the eyes.
+- **Extra keys** (`~/.termux/termux.properties`): a row with `> < | && ; ~` \` so you
+  do not have to rely on the regular touchscreen keyboard when writing commands or code.
+- **Enhanced nano** (`~/.nanorc`): line numbers, automatic indentation, interface colors,
+  and syntax highlighting for dozens of languages through the
+  [scopatz/nanorc](https://github.com/scopatz/nanorc) repository.
+- **Prompt + automatic clear** (`~/.noxmod/prompt.sh`, loaded from `~/.bashrc`):
 
   ```
-  ┌─[nox@termux]─[192.168.1.34]─[~/proyectos/kaisen (main)]
+  ┌─[user@termux]─[192.168.1.34]─[~/proyect/]
   └──> 
   ```
 
-  La pantalla se limpia sola al abrir Termux. La IP es la de `wlan0` (Wi-Fi);
-  si no hay Wi-Fi conectada, busca otra interfaz descartando las de datos
-  móviles (`ccmni*`, `rmnet*`, `pdp*`) para no mostrar la IP de la operadora
-  por error.
+  The screen is cleared automatically when opening Termux. The IP is taken from
+  `wlan0` (Wi-Fi); if no Wi-Fi is connected, it looks for another interface while
+  excluding mobile data interfaces (`ccmni*`, `rmnet*`, `pdp*`) to avoid displaying
+  the carrier's IP by mistake.
 
-## Instalación
+## Installation
 
-Con el proyecto descomprimido, un solo comando (no hace falta `chmod`):
+With the project extracted, run one command (`chmod` is not required):
 
 ```bash
 cd noxmod-termux
@@ -37,40 +50,45 @@ bash noxtermux.sh
 source ~/.bashrc
 ```
 
-`noxtermux.sh` hace *backup* automático de tu `colors.properties`, `termux.properties`,
-`.nanorc` y `.bashrc` previos en `~/.noxmod-backups/<fecha>/` antes de tocar nada.
+`noxtermux.sh` automatically backs up your existing `colors.properties`,
+`termux.properties`, `.nanorc`, and `.bashrc` to `~/.noxmod-backups/<date>/`
+before making any changes.
 
-## Volver todo a como estaba
+## Restore the Previous State
 
-También con un solo comando, desde cualquier sitio dentro de Termux (no depende
-del resto del proyecto, funciona por sí solo):
+Again, run one command from anywhere inside Termux. It does not depend on the rest
+of the project and works on its own:
 
 ```bash
 bash default.sh
 source ~/.bashrc
 ```
 
-Restaura la última copia de seguridad guardada por `noxtermux.sh` y quita el
-bloque que se añadió a `~/.bashrc`. Si nunca hubo backup, deja Termux en su
-estado de fábrica (sin tema, sin prompt, sin teclas extra).
+Restores the latest backup saved by `noxtermux.sh` and removes the block added to
+`~/.bashrc`. If no backup exists, it restores Termux to its default state (no theme,
+no prompt, and no extra keys).
 
-## Estructura del proyecto
+## Project Structure
 
 ```
 noxmod-termux/
-├── noxtermux.sh           # instalador (bash noxtermux.sh)
-├── default.sh              # reset a estado por defecto (bash default.sh)
-├── colors.properties      # paleta de color del terminal
-├── termux.properties      # fila de teclas extra
-├── nano-options.nanorc    # opciones visuales de nano
-├── prompt.sh              # prompt (usuario, IP privada, git) + banner + clear
+├── noxtermux.sh           # installer (bash noxtermux.sh)
+├── default.sh              # reset to default state (bash default.sh)
+├── colors.properties      # terminal color palette
+├── termux.properties      # extra keys row
+├── nano-options.nanorc    # nano visual options
+├── prompt.sh              # prompt (username, private IP, git) + banner + clear
 └── README.md
 ```
 
-## Notas
+## Notes
 
-- Necesita conexión a internet la primera vez, para clonar el repo de sintaxis de
-  nano con `git`. Si no hay red, nano se queda con las opciones visuales pero sin
-  resaltado de lenguajes hasta que vuelvas a correr `bash noxtermux.sh`.
-- Ambos scripts se niegan a ejecutarse si no detectan `$PREFIX` de Termux, para no
-  tocar la configuración de otro sistema por error.
+- An internet connection is required the first time to clone the nano syntax
+  repository with `git`. If there is no network connection, nano keeps the visual
+  options but has no language highlighting until you run `bash noxtermux.sh` again.
+- Both scripts refuse to run if they do not detect Termux's `$PREFIX`, to avoid
+  modifying another system's configuration by mistake.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
