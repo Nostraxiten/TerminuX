@@ -17,7 +17,9 @@ Enhanced `nano`, extra shell keys, and a clean Kali-style prompt with private IP
 <div align="center">
 <img width="436" height="166" alt="Captura de pantalla 2026-09-03 074223" src="https://github.com/user-attachments/assets/fb0d61a2-1bd9-46d8-9ebd-026084a8c3ee" />
 </div>
+<div align="center">
 
+</div>
 ## What It Installs
 
 - **Color theme** (`~/.termux/colors.properties`): dark "Nightwire"-style palette
@@ -29,7 +31,9 @@ Enhanced `nano`, extra shell keys, and a clean Kali-style prompt with private IP
   and syntax highlighting for dozens of languages through the
   [scopatz/nanorc](https://github.com/scopatz/nanorc) repository.
 - **Prompt + automatic clear** (`~/.noxmod/prompt.sh`, loaded from `~/.bashrc`):
+<div align="center">
 
+</div>
 <div align="center">
 <img width="407" height="67" alt="Captura de pantalla 2026-09-03 074231" src="https://github.com/user-attachments/assets/78b9b0d6-6232-4355-90e4-512560e1a20f" />
 </div>
