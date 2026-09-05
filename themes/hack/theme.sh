@@ -1,8 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# TerminuX — Definición del tema: HACK
+# TerminuX — Theme definition: HACK
 
 THEME_NAME="HACK"
-THEME_DESC="Estilo Matrix Hacker (verde fósforo y negro profundo)"
+THEME_DESC="Matrix Hacker style (phosphor green and deep black)"
 THEME_ALLOW_CUSTOM="yes"
 
 theme_render_banner() {
@@ -13,7 +13,7 @@ theme_render_banner() {
  | __ |/ _ \ (__| ' < 
  |_||_/_/ \_\___|_|\_\
 EOF
-    printf '\e[0;32m [⚡] TerminuX // HACK \e[1;30m|\e[0;32m ACCESS GRANTED // MATRIX\e[0m\n\n'
+    printf '\e[0;32m [+] TerminuX // HACK \e[1;30m|\e[0;32m ACCESS GRANTED // MATRIX\e[0m\n\n'
 }
 
 theme_render_prompt() {
@@ -32,5 +32,6 @@ theme_render_prompt() {
     local git_seg=""
     [ -n "$g" ] && git_seg=" ${g_col}git:(${g})${box}"
 
-    PS1="${box}┌──[${usr}${u}@${h}${box}]${ip_seg}──[${p_col}${p}${git_seg}${box}]${r}\n${box}└──${sym}⚡>${r} "
+    PS1="${box}┌──[${usr}${u}@${h}${box}]${ip_seg}──[${p_col}${p}${git_seg}${box}]${r}\n${box}└──${sym}>${r} "
 }
+

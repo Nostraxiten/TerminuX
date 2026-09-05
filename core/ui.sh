@@ -1,5 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# TerminuX — Módulo de Interfaz y Formato de Terminal
+# TerminuX — Terminal UI & Formatting Module
 
 CLR_RESET='\e[0m'
 CLR_BOLD='\e[1m'
@@ -30,8 +30,7 @@ print_main_banner() {
     | |  __/ |  | | | | | | | | | | |_| | |\  |>  < 
     |_|\___|_|  |_| |_| |_|_|_| |_|\__,_|_| \_/_/\_\
 EOF
-    printf "${CLR_YELLOW}       ⚡ Ultra Terminal Customizer for Termux ⚡\n"
-    printf "${CLR_GRAY}           Desarrollado para Nox (@nostraxiten)\n\n${CLR_RESET}"
+    printf "${CLR_CYAN}       Terminal Customization Suite for Termux\n\n${CLR_RESET}"
 }
 
 draw_box_header() {
@@ -43,3 +42,4 @@ draw_box_header() {
     printf "│  ${CLR_BOLD}${CLR_WHITE}%s${CLR_RESET}${CLR_CYAN}  │\n" "$title"
     printf "╰${border}╯${CLR_RESET}\n"
 }
+

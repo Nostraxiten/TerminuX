@@ -1,4 +1,4 @@
-# === TerminuX: Colores de Nano para tema RED ===
+# === TerminuX: Nano colors for RED theme ===
 set titlecolor brightwhite,red
 set statuscolor white,red
 set numbercolor brightred

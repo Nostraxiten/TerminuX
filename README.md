@@ -19,101 +19,103 @@
 <img width="436" height="166" alt="TerminuX Header" src="https://github.com/user-attachments/assets/fb0d61a2-1bd9-46d8-9ebd-026084a8c3ee" />
 </div>
 
-## Características Principales
+## Key Features
 
-- **5 Temas Visuales Completos**:
-  - **`Yello`** *(Por defecto)*: Paleta Nightwire suave (fondo oscuro `#1a1b26`, acentos cian, verde y amarillo).
-  - **`HACK`**: Estilo Matrix Hacker (verde neón fosforescente sobre negro profundo con símbolos cyber).
-  - **`RED`**: Estilo cibernético rojo y negro con logo minimalista terminal `>_` con parpadeo activo (`\e[5m`).
-  - **`Space`**: Azul cósmico profundo con decoración espacial de estrellas ASCII sutiles (`✦`, `*`, `·`, `✧`, `˚`) en la línea de escritura.
-  - **`ROOT`**: Réplica 100% auténtica y literal del entorno root de Kali Linux (`root@kali:~#`), estricta y sin alteraciones de IP para máxima fidelidad.
-- **Gestor de IP Avanzado (Real o Falsa)**:
-  - Detección automática de WiFi (`wlan0`) excluyendo interfaces de datos móviles (`rmnet*`, `ccmni*`) para evitar fugas de IP del operador.
-  - Soporte para **IP falsa personalizada** con validación estricta de 4 octetos en rango `0.0.0.0` a `255.255.255.255`.
-  - Opción para ocultar la IP si prefieres un prompt compacto.
-- **Menú TUI Interactivo y CLI `terminux`**:
-  - Interfaz visual con selector de temas al vuelo sin reinstalar.
-  - Comando global `terminux` para cambiar temas y opciones desde cualquier directorio.
-- **Nano Mejorado**: Números de línea, indentación inteligente y colores sincronizados con el tema activo, además de soporte para decenas de lenguajes.
-- **Teclas Extra para Programación**: Fila superior con navegación (`ESC`, `TAB`, flechas) y símbolos frecuentes (`> < | && ; ~ \``).
+- **5 Complete Visual Themes**:
+  - **`Yello`** *(Default)*: Soft Nightwire palette (dark background `#1a1b26`, cyan, green, and yellow accents).
+  - **`HACK`**: Matrix Hacker theme (phosphor green over deep black).
+  - **`RED`**: Cyber red and black with pulsing `>_` terminal logo (`\e[5m`).
+  - **`Space`**: Deep cosmic blue with subtle ASCII star accents (`✦`, `*`, `·`, `✧`, `˚`).
+  - **`ROOT`**: Authentic Kali Linux root replica (`root@kali:~#`), strict and locked for fidelity.
+- **Advanced IP Manager (Real or Custom/Fake)**:
+  - Automatic WiFi detection (`wlan0`) excluding cellular data interfaces (`rmnet*`, `ccmni*`) to prevent operator IP leaks.
+  - Support for **custom fake IP** with strict 4-octet validation within range `0.0.0.0` to `255.255.255.255`.
+  - Option to hide IP segment from prompt for a compact appearance.
+- **Interactive TUI Menu and CLI `terminux`**:
+  - Visual interface with on-the-fly theme switcher without reinstallation.
+  - Global `terminux` CLI command to manage themes and preferences from any directory.
+- **Enhanced Nano Editor**: Line numbers, smart indentation, syntax highlighting for dozens of languages, and colors synced to active theme.
+- **Extra Programming Keys**: Top bar with essential keys (`ESC`, `TAB`, arrows) and frequent programming symbols (`> < | && ; ~ \``).
 
 ---
 
-## Instalación Rápida
+## Quick Installation
 
-Copia y pega este comando en Termux (repara automáticamente mirrors caídos o desincronizados, limpia la caché e instala todo):
+Run the following command in Termux (automatically fixes desynced/broken mirrors, cleans cache, and installs dependencies):
 
 ```bash
 cd "$HOME" && rm -rf "$PREFIX/var/lib/apt/lists/"* && apt clean && sed -i 's|https://[^ ]*|https://grimler.se/termux/termux-main|g' "$PREFIX/etc/apt/sources.list" && pkg update -y && pkg install -y git && git clone https://github.com/Nostraxiten/TerminuX.git && cd TerminuX && bash noxtermux.sh
 ```
 
-Al finalizar, ejecuta `source ~/.bashrc` (o reinicia Termux) para disfrutar de tu nuevo entorno.
+When finished, run `source ~/.bashrc` (or restart Termux) to apply all changes.
 
 ---
 
-## Uso del Comando `terminux`
+## CLI Usage (`terminux`)
 
-Una vez instalado, tienes a tu disposición el comando global `terminux`:
+Once installed, use the global `terminux` command:
 
 ```bash
-terminux                      # Abre el menú visual interactivo
-terminux theme hack           # Cambia al tema HACK al instante
-terminux theme red            # Cambia al tema RED con logo parpadeante
-terminux theme space          # Cambia al tema Space con estrellas
-terminux theme root           # Cambia a la réplica oficial de Kali Root
-terminux theme yello          # Vuelve al tema Yello por defecto
-terminux ip fake 10.10.10.1   # Asigna una IP falsa (validada 0-255)
-terminux ip real              # Vuelve a detectar tu WiFi real
-terminux ip off               # Oculta la IP del prompt
-terminux user miusuario       # Cambia tu usuario del prompt
-terminux restore              # Desinstala y vuelve al estado original
+terminux                      # Open interactive visual TUI menu
+terminux theme hack           # Switch to HACK theme
+terminux theme red            # Switch to RED theme with pulsing logo
+terminux theme space          # Switch to Space theme
+terminux theme root           # Switch to Kali Linux Root replica
+terminux theme yello          # Switch to default Yello theme
+terminux ip fake 10.10.10.1   # Set custom fake IP (0-255 validated)
+terminux ip real              # Detect and display real WiFi IP
+terminux ip off               # Hide IP segment from prompt
+terminux user myuser          # Change prompt username
+terminux host myhost          # Change prompt hostname
+terminux restore              # Uninstall and restore previous configuration
 ```
 
 ---
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
 TerminuX/
-├── noxtermux.sh           # Instalador y lanzador del menú interactivo
-├── install.sh             # Entrypoint alternativo de instalación
-├── default.sh             # Script de restauración a estado de fábrica
+├── noxtermux.sh           # Main installer and TUI menu launcher
+├── install.sh             # Alternative installation entrypoint
+├── default.sh             # Factory reset and uninstaller script
 ├── bin/
-│   └── terminux           # Comando CLI global instalado en el sistema
-├── themes/                # Los 5 temas visuales
-│   ├── yello/             # Tema Nightwire suave
-│   ├── hack/              # Tema Matrix Hacker (verde y negro)
-│   ├── red/               # Tema RED (logo '>_' con parpadeo)
-│   ├── space/             # Tema Space (estrellas cósmicas)
-│   └── root/              # Tema ROOT (Kali Linux oficial)
-├── core/                  # Módulos del motor
-│   ├── menu.sh            # Interfaz visual TUI
-│   ├── installer.sh       # Lógica de instalación y backups
-│   ├── prompt_engine.sh   # Motor dinámico de prompt para bashrc
-│   ├── ip.sh              # Resolución de WiFi y validador de IP (0-255)
-│   ├── restore.sh         # Restaurador de configuraciones
-│   └── ui.sh              # Paletas ANSI y formato de cajas
-├── config/                # Configuraciones base
-│   ├── termux.properties  # Teclas extra para Termux
-│   └── nano-base.nanorc   # Configuración base de Nano
+│   └── terminux           # Global system CLI tool
+├── themes/                # Visual themes
+│   ├── yello/             # Nightwire soft theme
+│   ├── hack/              # Matrix Hacker theme
+│   ├── red/               # Cyber RED theme
+│   ├── space/             # Cosmic Space theme
+│   └── root/              # Kali Linux ROOT replica
+├── core/                  # Engine modules
+│   ├── menu.sh            # Interactive TUI interface
+│   ├── installer.sh       # Installation logic and backups
+│   ├── prompt_engine.sh   # Dynamic prompt engine for bashrc
+│   ├── ip.sh              # WiFi resolution and IP validator (0-255)
+│   ├── restore.sh         # Configuration restoration module
+│   └── ui.sh              # ANSI palette and box formatters
+├── config/                # Base configuration files
+│   ├── termux.properties  # Extra keys layout for Termux
+│   └── nano-base.nanorc   # Base Nano settings
 └── README.md
 ```
 
 ---
 
-## Restaurar el Estado Original
+## Factory Reset & Restoration
 
-Si deseas eliminar la personalización y restaurar tu configuración anterior (o el estado de fábrica de Termux), ejecuta:
+To remove custom configurations and restore your previous setup (or clean Termux default state):
 
 ```bash
 bash default.sh
 source ~/.bashrc
 ```
 
-`default.sh` es completamente independiente y restaura tu último respaldo guardado en `~/.noxmod-backups/`.
+`default.sh` is fully standalone and restores from backups stored in `~/.terminux-backups/`.
 
 ---
 
-## Licencia
+## License
 
-Este proyecto está bajo la Licencia [MIT](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
+

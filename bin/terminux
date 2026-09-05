@@ -1,13 +1,14 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# TerminuX — Herramienta de Línea de Comandos Global
+# TerminuX — Global Command Line Interface
 
 set -u
 
-NOXMOD_HOME="$HOME/.noxmod"
+TERMINUX_HOME="$HOME/.terminux"
+[ ! -d "$TERMINUX_HOME" ] && [ -d "$HOME/.noxmod" ] && TERMINUX_HOME="$HOME/.noxmod"
 
 find_script_base() {
-    if [ -d "$NOXMOD_HOME/core" ]; then
-        printf '%s' "$NOXMOD_HOME"
+    if [ -d "$TERMINUX_HOME/core" ]; then
+        printf '%s' "$TERMINUX_HOME"
     else
         local src="${BASH_SOURCE[0]}"
         local dir="$(cd "$(dirname "$src")/.." && pwd)"
@@ -19,31 +20,33 @@ BASE_DIR="$(find_script_base)"
 
 if [ -f "$BASE_DIR/core/installer.sh" ]; then
     source "$BASE_DIR/core/installer.sh"
+elif [ -f "$TERMINUX_HOME/core/installer.sh" ]; then
+    source "$TERMINUX_HOME/core/installer.sh"
 fi
 
 show_help() {
     cat << 'EOF'
-TerminuX — CLI de Personalización para Termux
+TerminuX — Terminal Customization CLI for Termux
 
-Uso:
-  terminux                    Abre el menú interactivo visual
-  terminux menu               Abre el menú interactivo visual
-  terminux theme <nombre>     Cambia el tema (yello, hack, red, space, root)
-  terminux ip real            Muestra tu IP real de WiFi
-  terminux ip fake <ip>       Configura una IP falsa/personalizada (0.0.0.0 - 255.255.255.255)
-  terminux ip off             Oculta el segmento de la IP en el prompt
-  terminux user <nombre>      Cambia el usuario del prompt
-  terminux host <nombre>      Cambia el host del prompt
-  terminux nano <color>       Abre o edita la configuración de Nano
-  terminux restore            Restaura la configuración previa / estado de fábrica
-  terminux help               Muestra esta ayuda
+Usage:
+  terminux                    Launch interactive TUI menu
+  terminux menu               Launch interactive TUI menu
+  terminux theme <name>       Switch theme (yello, hack, red, space, root)
+  terminux ip real            Display real WiFi IP in prompt
+  terminux ip fake <ip>       Set custom fake IP (0.0.0.0 - 255.255.255.255)
+  terminux ip off             Hide IP segment from prompt
+  terminux user <name>        Change prompt username
+  terminux host <name>        Change prompt hostname
+  terminux nano <name>        Configure or edit Nano color schemes
+  terminux restore            Restore previous backup / factory defaults
+  terminux help               Show this help message
 
-Temas Disponibles:
-  • yello  : Tema Nightwire suave original (cian/amarillo/verde)
-  • hack   : Tema Matrix Hacker (verde neón y negro)
-  • red    : Tema Rojo y Negro con logo '>_' parpadeante
-  • space  : Tema Azul Galáctico con estrellas ASCII en la escritura
-  • root   : Réplica exacta y oficial de Kali Linux en root (bloqueado)
+Available Themes:
+  - yello  : Nightwire soft palette (cyan/yellow/green) [Default]
+  - hack   : Matrix Hacker theme (phosphor green & deep black)
+  - red    : Cyber Red & Black with pulsing '>_' terminal logo
+  - space  : Deep Cosmic Blue with subtle ASCII stars
+  - root   : Exact Kali Linux root replica (locked)
 EOF
 }
 
@@ -53,8 +56,8 @@ case "$cmd" in
     menu)
         if [ -f "$BASE_DIR/core/menu.sh" ]; then
             bash "$BASE_DIR/core/menu.sh"
-        elif [ -f "$NOXMOD_HOME/core/menu.sh" ]; then
-            bash "$NOXMOD_HOME/core/menu.sh"
+        elif [ -f "$TERMINUX_HOME/core/menu.sh" ]; then
+            bash "$TERMINUX_HOME/core/menu.sh"
         else
             echo "Error: core/menu.sh not found."
             exit 1
@@ -63,75 +66,75 @@ case "$cmd" in
     theme)
         target_theme="${2:-}"
         if [ -z "$target_theme" ]; then
-            echo "Indica un tema: yello, hack, red, space, root"
+            echo "Please specify a theme: yello, hack, red, space, root"
             exit 1
         fi
         switch_theme "$target_theme"
         ;;
     ip)
         mode="${2:-}"
-        mkdir -p "$NOXMOD_HOME"
+        mkdir -p "$TERMINUX_HOME"
         case "$mode" in
             real)
-                printf 'real\n' > "$NOXMOD_HOME/ip-mode"
-                echo "IP configurada a: Real (WiFi)"
+                printf 'real\n' > "$TERMINUX_HOME/ip-mode"
+                echo "IP mode set to: Real (WiFi)"
                 ;;
             fake|custom)
                 fake_ip="${3:-}"
                 if [ -z "$fake_ip" ]; then
-                    echo "Debes proporcionar una IP. Ej: terminux ip fake 10.10.10.1"
+                    echo "Please provide an IP address. Example: terminux ip fake 10.10.10.1"
                     exit 1
                 fi
                 if validate_ipv4 "$fake_ip"; then
-                    printf 'custom\n' > "$NOXMOD_HOME/ip-mode"
-                    printf '%s\n' "$fake_ip" > "$NOXMOD_HOME/custom-ip"
-                    echo "IP falsa configurada: $fake_ip"
+                    printf 'custom\n' > "$TERMINUX_HOME/ip-mode"
+                    printf '%s\n' "$fake_ip" > "$TERMINUX_HOME/custom-ip"
+                    echo "Custom IP configured: $fake_ip"
                 else
-                    echo "Error: '$fake_ip' no es una IPv4 válida (debe ser 0.0.0.0 - 255.255.255.255)."
+                    echo "Error: '$fake_ip' is not a valid IPv4 address (must be 0.0.0.0 - 255.255.255.255)."
                     exit 1
                 fi
                 ;;
             off|none)
-                printf 'off\n' > "$NOXMOD_HOME/ip-mode"
-                echo "IP oculta en el prompt."
+                printf 'off\n' > "$TERMINUX_HOME/ip-mode"
+                echo "IP segment disabled in prompt."
                 ;;
             *)
-                echo "Opciones de IP: real, fake <ip>, off"
+                echo "IP Options: real, fake <ip>, off"
                 ;;
         esac
         ;;
     user)
         new_u="${2:-}"
         if [ -z "$new_u" ]; then
-            echo "Uso: terminux user <nombre>"
+            echo "Usage: terminux user <name>"
             exit 1
         fi
-        mkdir -p "$NOXMOD_HOME"
-        printf '%s\n' "$new_u" > "$NOXMOD_HOME/user-name"
-        echo "Usuario actualizado: $new_u"
+        mkdir -p "$TERMINUX_HOME"
+        printf '%s\n' "$new_u" > "$TERMINUX_HOME/user-name"
+        echo "Username updated to: $new_u"
         ;;
     host)
         new_h="${2:-}"
         if [ -z "$new_h" ]; then
-            echo "Uso: terminux host <nombre>"
+            echo "Usage: terminux host <name>"
             exit 1
         fi
-        mkdir -p "$NOXMOD_HOME"
-        printf '%s\n' "$new_h" > "$NOXMOD_HOME/host-name"
-        echo "Host actualizado: $new_h"
+        mkdir -p "$TERMINUX_HOME"
+        printf '%s\n' "$new_h" > "$TERMINUX_HOME/host-name"
+        echo "Hostname updated to: $new_h"
         ;;
     nano)
         if [ -f "$HOME/.nanorc" ]; then
             nano "$HOME/.nanorc"
         else
-            echo "El archivo ~/.nanorc aún no existe. Instala TerminuX primero."
+            echo "File ~/.nanorc does not exist. Run TerminuX installer first."
         fi
         ;;
     restore|reset)
         if [ -f "$BASE_DIR/core/restore.sh" ]; then
             bash "$BASE_DIR/core/restore.sh"
-        elif [ -f "$NOXMOD_HOME/core/restore.sh" ]; then
-            bash "$NOXMOD_HOME/core/restore.sh"
+        elif [ -f "$TERMINUX_HOME/core/restore.sh" ]; then
+            bash "$TERMINUX_HOME/core/restore.sh"
         else
             echo "Error: core/restore.sh not found."
             exit 1
@@ -141,8 +144,9 @@ case "$cmd" in
         show_help
         ;;
     *)
-        echo "Comando no reconocido: $cmd"
+        echo "Unknown command: $cmd"
         show_help
         exit 1
         ;;
 esac
+

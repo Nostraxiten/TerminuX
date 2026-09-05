@@ -1,14 +1,14 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# TerminuX — Motor Central de Instalación y Aplicación de Temas
+# TerminuX — Core Installation and Theme Engine
 
 set -u
 
 CORE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$CORE_DIR/.." && pwd)"
 
-NOXMOD_HOME="$HOME/.noxmod"
+TERMINUX_HOME="$HOME/.terminux"
 NANO_SYNTAX_DIR="$HOME/.nano-syntax"
-BACKUP_ROOT="$HOME/.noxmod-backups"
+BACKUP_ROOT="$HOME/.terminux-backups"
 STAMP="$(date +%Y%m%d-%H%M%S)"
 BACKUP_DIR="$BACKUP_ROOT/$STAMP"
 
@@ -17,8 +17,8 @@ source "$CORE_DIR/ip.sh"
 
 check_termux() {
     if [ -z "${PREFIX:-}" ] || [[ "$PREFIX" != *com.termux* ]]; then
-        c_err "This does not appear to be Termux (com.termux \$PREFIX was not detected)."
-        c_err "The script will not continue to avoid modifying another system's configuration."
+        c_err "This environment does not appear to be Termux (\$PREFIX is not set)."
+        c_err "Aborting to avoid modifying another system's configuration."
         exit 1
     fi
 }
@@ -40,22 +40,22 @@ init_backups() {
 }
 
 copy_themes_and_core() {
-    c_info "Configuring TerminuX internal modules..."
-    mkdir -p "$NOXMOD_HOME/themes"
-    mkdir -p "$NOXMOD_HOME/bin"
-    mkdir -p "$NOXMOD_HOME/core"
+    c_info "Configuring TerminuX modules..."
+    mkdir -p "$TERMINUX_HOME/themes"
+    mkdir -p "$TERMINUX_HOME/bin"
+    mkdir -p "$TERMINUX_HOME/core"
 
-    # Copiar todos los temas
-    cp -r "$ROOT_DIR/themes/"* "$NOXMOD_HOME/themes/"
-    cp "$ROOT_DIR/core/ip.sh" "$NOXMOD_HOME/ip.sh"
-    cp "$ROOT_DIR/core/prompt_engine.sh" "$NOXMOD_HOME/prompt.sh"
-    cp -r "$ROOT_DIR/core/"* "$NOXMOD_HOME/core/" 2>/dev/null || true
-    chmod +x "$NOXMOD_HOME/prompt.sh"
+    # Copy all themes and core scripts
+    cp -r "$ROOT_DIR/themes/"* "$TERMINUX_HOME/themes/"
+    cp "$ROOT_DIR/core/ip.sh" "$TERMINUX_HOME/ip.sh"
+    cp "$ROOT_DIR/core/prompt_engine.sh" "$TERMINUX_HOME/prompt.sh"
+    cp -r "$ROOT_DIR/core/"* "$TERMINUX_HOME/core/" 2>/dev/null || true
+    chmod +x "$TERMINUX_HOME/prompt.sh"
 }
 
 apply_colors_theme() {
     local theme="${1:-yello}"
-    local theme_colors="$NOXMOD_HOME/themes/$theme/colors.properties"
+    local theme_colors="$TERMINUX_HOME/themes/$theme/colors.properties"
 
     if [ ! -f "$theme_colors" ]; then
         theme_colors="$ROOT_DIR/themes/$theme/colors.properties"
@@ -83,7 +83,7 @@ apply_nano_config() {
     local theme="${1:-yello}"
     c_info "Setting up nano editor ($theme colors)..."
 
-    # Verificar paquetes
+    # Verify packages
     if ! command -v nano >/dev/null 2>&1; then
         pkg install -y nano >/dev/null 2>&1 || c_warn "Could not install nano automatically."
     fi
@@ -92,12 +92,12 @@ apply_nano_config() {
         if command -v git >/dev/null 2>&1; then
             c_info "Downloading nano syntax highlighting..."
             git clone --depth=1 https://github.com/scopatz/nanorc.git "$NANO_SYNTAX_DIR" >/dev/null 2>&1 || {
-                c_warn "Could not clone syntax repository. Using standard visual options."
+                c_warn "Could not clone syntax repository. Using base settings."
             }
         fi
     fi
 
-    local nano_theme="$NOXMOD_HOME/themes/$theme/nano.nanorc"
+    local nano_theme="$TERMINUX_HOME/themes/$theme/nano.nanorc"
     [ -f "$nano_theme" ] || nano_theme="$ROOT_DIR/themes/$theme/nano.nanorc"
 
     local base_nano="$ROOT_DIR/config/nano-base.nanorc"
@@ -121,27 +121,30 @@ apply_nano_config() {
 
 apply_bashrc_hook() {
     touch "$HOME/.bashrc"
-    if ! grep -q "NOXMOD_BLOCK_START" "$HOME/.bashrc" 2>/dev/null; then
-        {
-            echo ""
-            echo "# >>> NOXMOD_BLOCK_START (managed by noxtermux.sh, do not edit manually)"
-            echo "[ -f \"$NOXMOD_HOME/prompt.sh\" ] && source \"$NOXMOD_HOME/prompt.sh\""
-            echo "alias terminux=\"bash $NOXMOD_HOME/core/menu.sh\""
-            echo "# <<< NOXMOD_BLOCK_END"
-        } >> "$HOME/.bashrc"
-        c_ok "Hook and alias added to ~/.bashrc"
-    fi
+    # Clean any legacy blocks first
+    sed -i '/# >>> NOXMOD_BLOCK_START/,/# <<< NOXMOD_BLOCK_END/d' "$HOME/.bashrc"
+    sed -i '/# >>> TERMINUX_BLOCK_START/,/# <<< TERMINUX_BLOCK_END/d' "$HOME/.bashrc"
+    sed -i '/alias terminux=/d' "$HOME/.bashrc"
+
+    {
+        echo ""
+        echo "# >>> TERMINUX_BLOCK_START (managed by terminux, do not edit manually)"
+        echo "[ -f \"$TERMINUX_HOME/prompt.sh\" ] && source \"$TERMINUX_HOME/prompt.sh\""
+        echo "alias terminux=\"bash $TERMINUX_HOME/core/menu.sh\""
+        echo "# <<< TERMINUX_BLOCK_END"
+    } >> "$HOME/.bashrc"
+    c_ok "Hook and alias added to ~/.bashrc"
 }
 
 install_terminux_cli() {
     local cli_src="$ROOT_DIR/bin/terminux"
     if [ -f "$cli_src" ]; then
-        cp "$cli_src" "$NOXMOD_HOME/bin/terminux"
-        chmod +x "$NOXMOD_HOME/bin/terminux"
+        cp "$cli_src" "$TERMINUX_HOME/bin/terminux"
+        chmod +x "$TERMINUX_HOME/bin/terminux"
 
         if [ -n "${PREFIX:-}" ] && [ -d "$PREFIX/bin" ]; then
             cp "$cli_src" "$PREFIX/bin/terminux" 2>/dev/null && chmod +x "$PREFIX/bin/terminux" 2>/dev/null || true
-            c_ok "CLI tool 'terminux' registered in system path."
+            c_ok "CLI command 'terminux' installed to system path."
         fi
     fi
 }
@@ -149,24 +152,23 @@ install_terminux_cli() {
 reload_settings() {
     if command -v termux-reload-settings >/dev/null 2>&1; then
         termux-reload-settings
-        c_ok "Terminal colors and settings reloaded!"
+        c_ok "Terminal configuration reloaded."
     else
-        c_warn "Run 'termux-reload-settings' or restart Termux to see new colors."
+        c_warn "Run 'termux-reload-settings' or restart Termux to apply visual changes."
     fi
 }
 
-# Función para cambiar de tema al vuelo
 switch_theme() {
     local new_theme="${1:-yello}"
     new_theme="$(echo "$new_theme" | tr '[:upper:]' '[:lower:]')"
 
-    if [ ! -d "$ROOT_DIR/themes/$new_theme" ] && [ ! -d "$NOXMOD_HOME/themes/$new_theme" ]; then
+    if [ ! -d "$ROOT_DIR/themes/$new_theme" ] && [ ! -d "$TERMINUX_HOME/themes/$new_theme" ]; then
         c_err "Theme '$new_theme' does not exist. Available: yello, hack, red, space, root."
         return 1
     fi
 
-    mkdir -p "$NOXMOD_HOME"
-    printf '%s\n' "$new_theme" > "$NOXMOD_HOME/active-theme"
+    mkdir -p "$TERMINUX_HOME"
+    printf '%s\n' "$new_theme" > "$TERMINUX_HOME/active-theme"
 
     apply_colors_theme "$new_theme"
     apply_nano_config "$new_theme"
@@ -181,8 +183,8 @@ full_install() {
     init_backups
     copy_themes_and_core
     
-    # Guardar tema activo
-    printf '%s\n' "$theme" > "$NOXMOD_HOME/active-theme"
+    # Store active theme
+    printf '%s\n' "$theme" > "$TERMINUX_HOME/active-theme"
 
     apply_colors_theme "$theme"
     apply_termux_keys
@@ -192,8 +194,9 @@ full_install() {
     reload_settings
 
     echo
-    c_ok "TerminuX installed successfully with theme: $theme!"
+    c_ok "TerminuX installed successfully with theme: $theme"
     c_info "Backup created at: $BACKUP_DIR"
-    c_info "You can change themes or settings anytime by typing: terminux"
-    c_info "Run:  source ~/.bashrc  (or open a new terminal)."
+    c_info "Manage settings anytime by running: terminux"
+    c_info "Apply changes now: source ~/.bashrc (or restart Termux)."
 }
+

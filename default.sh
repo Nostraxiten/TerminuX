@@ -1,19 +1,16 @@
 #!/data/data/com.termux/files/usr/bin/bash
+# TerminuX — Factory Reset & Uninstaller
+# Restores previous configuration or clean Termux default state.
 #
-# TerminuX — RESET A DEFAULT / DESINSTALADOR
-# Quita colores, prompt, nanorc, teclas extra y atajos instalados por TerminuX
-# y restaura tu configuración previa (o el estado original de fábrica).
-# No depende de ningún otro archivo del proyecto: funciona solo.
-#
-# Uso:
+# Usage:
 #   bash default.sh
-#
-# Autor: hecho para Nox (@nostraxiten)
 
 set -u
 
-NOXMOD_HOME="$HOME/.noxmod"
-BACKUP_ROOT="$HOME/.noxmod-backups"
+TERMINUX_HOME="$HOME/.terminux"
+BACKUP_ROOT="$HOME/.terminux-backups"
+LEGACY_HOME="$HOME/.noxmod"
+LEGACY_BACKUP="$HOME/.noxmod-backups"
 
 c_info()  { printf '\e[1;36m[*]\e[0m %s\n' "$1"; }
 c_ok()    { printf '\e[1;32m[OK]\e[0m %s\n' "$1"; }
@@ -22,8 +19,8 @@ c_err()   { printf '\e[1;31m[ERROR]\e[0m %s\n' "$1"; }
 
 check_termux() {
     if [ -z "${PREFIX:-}" ] || [[ "$PREFIX" != *com.termux* ]]; then
-        c_err "This does not appear to be Termux (com.termux \$PREFIX was not detected)."
-        c_err "The script will not continue to avoid modifying another system's configuration."
+        c_err "This environment does not appear to be Termux (\$PREFIX is not set)."
+        c_err "Aborting to avoid modifying another system's configuration."
         exit 1
     fi
 }
@@ -31,9 +28,9 @@ check_termux() {
 reload_settings() {
     if command -v termux-reload-settings >/dev/null 2>&1; then
         termux-reload-settings
-        c_ok "Colors reloaded."
+        c_ok "Terminal configuration reloaded."
     else
-        c_warn "'termux-reload-settings' was not found; close and reopen Termux to see the change."
+        c_warn "Run 'termux-reload-settings' or restart Termux to apply changes."
     fi
 }
 
@@ -41,30 +38,40 @@ main() {
     check_termux
 
     local last_backup=""
+    local active_backup_root=""
+
     if [ -d "$BACKUP_ROOT" ] && [ -n "$(ls -A "$BACKUP_ROOT" 2>/dev/null)" ]; then
+        active_backup_root="$BACKUP_ROOT"
         last_backup="$(ls -1 "$BACKUP_ROOT" | sort | tail -n1)"
+    elif [ -d "$LEGACY_BACKUP" ] && [ -n "$(ls -A "$LEGACY_BACKUP" 2>/dev/null)" ]; then
+        active_backup_root="$LEGACY_BACKUP"
+        last_backup="$(ls -1 "$LEGACY_BACKUP" | sort | tail -n1)"
+    fi
+
+    if [ -n "$last_backup" ]; then
         c_info "Restoring backup: $last_backup"
     else
-        c_warn "No NoxMod backups found; Termux will be restored to its default state (no theme, no prompt)."
+        c_warn "No backups found; Termux will be restored to clean default state."
     fi
 
-    # Quitar el bloque que noxtermux.sh añadió a .bashrc y el alias de terminux
+    # Remove bashrc hook and aliases
     if [ -f "$HOME/.bashrc" ]; then
         sed -i '/# >>> NOXMOD_BLOCK_START/,/# <<< NOXMOD_BLOCK_END/d' "$HOME/.bashrc"
+        sed -i '/# >>> TERMINUX_BLOCK_START/,/# <<< TERMINUX_BLOCK_END/d' "$HOME/.bashrc"
         sed -i '/alias terminux=/d' "$HOME/.bashrc"
-        c_ok "TerminuX block and aliases removed from ~/.bashrc"
+        c_ok "TerminuX configurations removed from ~/.bashrc"
     fi
 
-    # Eliminar comando global de terminux si existe
+    # Remove CLI binary
     if [ -n "${PREFIX:-}" ] && [ -f "$PREFIX/bin/terminux" ]; then
         rm -f "$PREFIX/bin/terminux"
         c_ok "Removed \$PREFIX/bin/terminux"
     fi
 
-    rm -rf "$NOXMOD_HOME"
+    rm -rf "$TERMINUX_HOME" "$LEGACY_HOME"
 
-    if [ -n "$last_backup" ]; then
-        local bdir="$BACKUP_ROOT/$last_backup"
+    if [ -n "$last_backup" ] && [ -n "$active_backup_root" ]; then
+        local bdir="$active_backup_root/$last_backup"
         if [ -f "$bdir/colors.properties.bak" ]; then
             cp "$bdir/colors.properties.bak" "$HOME/.termux/colors.properties"
         else
@@ -91,8 +98,9 @@ main() {
 
     reload_settings
     echo
-    c_ok "Termux is back to its original state before TerminuX."
-    c_info "Run:  source ~/.bashrc   (or restart Termux) to apply the change."
+    c_ok "Termux restored to original state."
+    c_info "Run:  source ~/.bashrc  (or restart Termux) to apply changes."
 }
 
 main
+

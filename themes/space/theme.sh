@@ -1,8 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# TerminuX — Definición del tema: Space
+# TerminuX — Theme definition: Space
 
 THEME_NAME="Space"
-THEME_DESC="Azul galáctico profundo con decoración de estrellas ASCII en la escritura"
+THEME_DESC="Deep cosmic blue with subtle ASCII star accents"
 THEME_ALLOW_CUSTOM="yes"
 
 theme_render_banner() {
@@ -18,7 +18,7 @@ theme_render_banner() {
          | |                   
          |_|   ✦  S P A C E  ✦
 EOF
-    printf '\e[0;36m      ★ TerminuX \e[1;30m|\e[0;35m DEEP COSMOS // GALAXY\e[0m\n\n'
+    printf '\e[0;36m      [+] TerminuX \e[1;30m|\e[0;35m DEEP COSMOS // GALAXY\e[0m\n\n'
 }
 
 theme_render_prompt() {
@@ -41,3 +41,4 @@ theme_render_prompt() {
 
     PS1="${box}┌─${star1}─[${usr}${u}@${h}${box}]${ip_seg}─${star2}─[${p_col}${p}${git_seg}${box}]─${star1}${r}\n${box}└──${writing_deco}${r} "
 }
+

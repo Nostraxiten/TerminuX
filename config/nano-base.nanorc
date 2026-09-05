@@ -1,7 +1,8 @@
-# === TerminuX: Opciones base de nano ===
+# === TerminuX: Base nano options ===
 set linenumbers
 set constantshow
 set autoindent
 set tabsize 4
 set softwrap
 set indicator
+

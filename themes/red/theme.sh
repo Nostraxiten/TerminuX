@@ -1,8 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# TerminuX — Definición del tema: RED
+# TerminuX — Theme definition: RED
 
 THEME_NAME="RED"
-THEME_DESC="Estilo rojo y negro con logo cibernético '>_' parpadeante"
+THEME_DESC="Red and black style with pulsing '>_' terminal logo"
 THEME_ALLOW_CUSTOM="yes"
 
 theme_render_banner() {
@@ -36,3 +36,4 @@ theme_render_prompt() {
 
     PS1="${box}┌──[${usr}${u}@${h}${box}]${ip_seg}──[${p_col}${p}${git_seg}${box}]${r}\n${box}└──${logo}─>${r} "
 }
+

@@ -1,25 +1,25 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# TerminuX — Módulo de Resolución y Validación de IP
+# TerminuX — IP Resolution and Validation Module
 
 validate_ipv4() {
     local ip="$1"
     [ -z "$ip" ] && return 1
 
-    # Separar en 4 partes por el punto
+    # Split into 4 octets by dot
     local IFS='.'
     read -ra octets <<< "$ip"
     [ "${#octets[@]}" -ne 4 ] && return 1
 
     for oct in "${octets[@]}"; do
-        # Debe contener únicamente números
+        # Must contain only digits
         [[ "$oct" =~ ^[0-9]+$ ]] || return 1
 
-        # No permitir ceros a la izquierda en números mayores a 0 (ej: 01, 002)
+        # Do not allow leading zeros for numbers > 0 (e.g., 01, 002)
         if [[ "${#oct}" -gt 1 && "$oct" =~ ^0 ]]; then
             return 1
         fi
 
-        # Rango 0 a 255
+        # Range 0 to 255
         if (( oct < 0 || oct > 255 )); then
             return 1
         fi
@@ -32,12 +32,12 @@ get_real_ip() {
     local ip=""
 
     if command -v ip >/dev/null 2>&1; then
-        # Buscar interfaz wlan0 primero
+        # Search for wlan0 interface first
         ip=$(ip -4 addr show 2>/dev/null | awk '
             /^[0-9]+: / { cur=$2; sub(/:$/,"",cur) }
             cur=="wlan0" && /inet /{ split($2,a,"/"); print a[1]; exit }
         ')
-        # Si no hay wlan0, buscar interfaz no-loopback y no-datos móviles
+        # If wlan0 is not found, search non-loopback and non-cellular interface
         if [ -z "$ip" ]; then
             ip=$(ip -4 addr show 2>/dev/null | awk '
                 /^[0-9]+: / { cur=$2; sub(/:$/,"",cur) }
@@ -68,7 +68,8 @@ get_real_ip() {
 }
 
 get_active_ip() {
-    local conf_dir="${1:-$HOME/.noxmod}"
+    local conf_dir="${1:-$HOME/.terminux}"
+    [ ! -d "$conf_dir" ] && [ -d "$HOME/.noxmod" ] && conf_dir="$HOME/.noxmod"
     local mode="real"
     local custom_ip="192.168.1.100"
 
@@ -91,3 +92,4 @@ get_active_ip() {
             ;;
     esac
 }
+

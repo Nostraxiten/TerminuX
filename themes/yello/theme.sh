@@ -1,8 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# TerminuX — Definición del tema: Yello
+# TerminuX — Theme definition: Yello
 
 THEME_NAME="Yello"
-THEME_DESC="Paleta suave Nightwire (cian, verde y amarillo)"
+THEME_DESC="Nightwire soft palette (cyan, green, and yellow)"
 THEME_ALLOW_CUSTOM="yes"
 
 theme_render_banner() {
@@ -14,7 +14,7 @@ theme_render_banner() {
    | |  __/ |  | | | | | | | | | | |_| | |\  |
    |_|\___|_|  |_| |_| |_|_|_| |_|\__,_|_| \_|
 EOF
-    printf '\e[0;33m      ★ TerminuX \e[1;30m|\e[0;36m Estilo Suave Nightwire\e[0m\n\n'
+    printf '\e[0;33m      [+] TerminuX \e[1;30m|\e[0;36m Nightwire Soft Theme\e[0m\n\n'
 }
 
 theme_render_prompt() {
@@ -35,3 +35,4 @@ theme_render_prompt() {
 
     PS1="${box}┌─[${usr}${u}@${h}${box}]${ip_seg}─[${p_col}${p}${git_seg}${box}]${r}\n${box}└──${arr}>${r} "
 }
+
