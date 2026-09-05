@@ -41,10 +41,10 @@
 
 ## Instalación Rápida
 
-Copia y pega este comando en Termux:
+Copia y pega este comando en Termux (repara automáticamente mirrors caídos o desincronizados, limpia la caché e instala todo):
 
 ```bash
-cd "$HOME" && pkg update -y && pkg install -y git && git clone https://github.com/Nostraxiten/TerminuX.git && cd TerminuX && bash noxtermux.sh
+cd "$HOME" && rm -rf "$PREFIX/var/lib/apt/lists/"* && apt clean && sed -i 's|https://[^ ]*|https://grimler.se/termux/termux-main|g' "$PREFIX/etc/apt/sources.list" && pkg update -y && pkg install -y git && git clone https://github.com/Nostraxiten/TerminuX.git && cd TerminuX && bash noxtermux.sh
 ```
 
 Al finalizar, ejecuta `source ~/.bashrc` (o reinicia Termux) para disfrutar de tu nuevo entorno.
