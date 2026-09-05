@@ -19,27 +19,27 @@
 <img width="436" height="166" alt="TerminuX Header" src="https://github.com/user-attachments/assets/fb0d61a2-1bd9-46d8-9ebd-026084a8c3ee" />
 </div>
 
-## ✨ Características Principales
+## Características Principales
 
-- 🎨 **5 Temas Visuales Completos**:
+- **5 Temas Visuales Completos**:
   - **`Yello`** *(Por defecto)*: Paleta Nightwire suave (fondo oscuro `#1a1b26`, acentos cian, verde y amarillo).
   - **`HACK`**: Estilo Matrix Hacker (verde neón fosforescente sobre negro profundo con símbolos cyber).
   - **`RED`**: Estilo cibernético rojo y negro con logo minimalista terminal `>_` con parpadeo activo (`\e[5m`).
   - **`Space`**: Azul cósmico profundo con decoración espacial de estrellas ASCII sutiles (`✦`, `*`, `·`, `✧`, `˚`) en la línea de escritura.
   - **`ROOT`**: Réplica 100% auténtica y literal del entorno root de Kali Linux (`root@kali:~#`), estricta y sin alteraciones de IP para máxima fidelidad.
-- 🌐 **Gestor de IP Avanzado (Real o Falsa)**:
+- **Gestor de IP Avanzado (Real o Falsa)**:
   - Detección automática de WiFi (`wlan0`) excluyendo interfaces de datos móviles (`rmnet*`, `ccmni*`) para evitar fugas de IP del operador.
   - Soporte para **IP falsa personalizada** con validación estricta de 4 octetos en rango `0.0.0.0` a `255.255.255.255`.
   - Opción para ocultar la IP si prefieres un prompt compacto.
-- ⚡ **Menú TUI Interactivo y CLI `terminux`**:
+- **Menú TUI Interactivo y CLI `terminux`**:
   - Interfaz visual con selector de temas al vuelo sin reinstalar.
   - Comando global `terminux` para cambiar temas y opciones desde cualquier directorio.
-- 📝 **Nano Mejorado**: Números de línea, indentación inteligente y colores sincronizados con el tema activo, además de soporte para decenas de lenguajes.
-- ⌨️ **Teclas Extra para Programación**: Fila superior con navegación (`ESC`, `TAB`, flechas) y símbolos frecuentes (`> < | && ; ~ \``).
+- **Nano Mejorado**: Números de línea, indentación inteligente y colores sincronizados con el tema activo, además de soporte para decenas de lenguajes.
+- **Teclas Extra para Programación**: Fila superior con navegación (`ESC`, `TAB`, flechas) y símbolos frecuentes (`> < | && ; ~ \``).
 
 ---
 
-## 🚀 Instalación Rápida
+## Instalación Rápida
 
 Copia y pega este comando en Termux:
 
@@ -51,7 +51,7 @@ Al finalizar, ejecuta `source ~/.bashrc` (o reinicia Termux) para disfrutar de t
 
 ---
 
-## 🛠️ Uso del Comando `terminux`
+## Uso del Comando `terminux`
 
 Una vez instalado, tienes a tu disposición el comando global `terminux`:
 
@@ -71,7 +71,7 @@ terminux restore              # Desinstala y vuelve al estado original
 
 ---
 
-## 📂 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 TerminuX/
@@ -101,7 +101,7 @@ TerminuX/
 
 ---
 
-## 🔄 Restaurar el Estado Original
+## Restaurar el Estado Original
 
 Si deseas eliminar la personalización y restaurar tu configuración anterior (o el estado de fábrica de Termux), ejecuta:
 
@@ -114,6 +114,6 @@ source ~/.bashrc
 
 ---
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto está bajo la Licencia [MIT](LICENSE).
