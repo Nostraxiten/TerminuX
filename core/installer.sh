@@ -160,7 +160,7 @@ reload_settings() {
 
 switch_theme() {
     local new_theme="${1:-yello}"
-    new_theme="$(echo "$new_theme" | tr '[:upper:]' '[:lower:]')"
+    new_theme="$(echo "$new_theme" | tr '[:upper:]' '[:lower:]' | tr -d '\r\n ')"
 
     if [ ! -d "$ROOT_DIR/themes/$new_theme" ] && [ ! -d "$TERMINUX_HOME/themes/$new_theme" ]; then
         c_err "Theme '$new_theme' does not exist. Available: yello, hack, red, space, root."

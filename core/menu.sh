@@ -16,26 +16,26 @@ source "$SCRIPT_DIR/restore.sh"
 
 get_current_status() {
     local cur_theme="yello"
-    [ -f "$TERMINUX_HOME/active-theme" ] && cur_theme="$(cat "$TERMINUX_HOME/active-theme" 2>/dev/null)"
+    [ -f "$TERMINUX_HOME/active-theme" ] && cur_theme="$(tr -d '\r\n ' < "$TERMINUX_HOME/active-theme" 2>/dev/null)"
     [ -n "$cur_theme" ] || cur_theme="yello"
 
     local cur_user="user"
-    [ -f "$TERMINUX_HOME/user-name" ] && cur_user="$(cat "$TERMINUX_HOME/user-name" 2>/dev/null)"
+    [ -f "$TERMINUX_HOME/user-name" ] && cur_user="$(tr -d '\r\n ' < "$TERMINUX_HOME/user-name" 2>/dev/null)"
     [ -n "$cur_user" ] || cur_user="${USER:-user}"
 
     local cur_host="termux"
-    [ -f "$TERMINUX_HOME/host-name" ] && cur_host="$(cat "$TERMINUX_HOME/host-name" 2>/dev/null)"
+    [ -f "$TERMINUX_HOME/host-name" ] && cur_host="$(tr -d '\r\n ' < "$TERMINUX_HOME/host-name" 2>/dev/null)"
     [ -n "$cur_host" ] || cur_host="termux"
 
     local ip_mode="real"
-    [ -f "$TERMINUX_HOME/ip-mode" ] && ip_mode="$(cat "$TERMINUX_HOME/ip-mode" 2>/dev/null)"
+    [ -f "$TERMINUX_HOME/ip-mode" ] && ip_mode="$(tr -d '\r\n ' < "$TERMINUX_HOME/ip-mode" 2>/dev/null)"
     [ -n "$ip_mode" ] || ip_mode="real"
 
     local cur_ip=""
     case "$ip_mode" in
         custom|fake)
             local f_ip="10.0.0.1"
-            [ -f "$TERMINUX_HOME/custom-ip" ] && f_ip="$(cat "$TERMINUX_HOME/custom-ip" 2>/dev/null)"
+            [ -f "$TERMINUX_HOME/custom-ip" ] && f_ip="$(tr -d '\r\n ' < "$TERMINUX_HOME/custom-ip" 2>/dev/null)"
             cur_ip="Custom ($f_ip)"
             ;;
         off|none)
@@ -56,14 +56,14 @@ render_status_card() {
     IFS='|' read -r s_theme s_user s_host s_ip <<< "$status"
 
     printf "${CLR_CYAN}  ╭────────────────────────────────────────────────────────╮\n"
-    printf "  │ ${CLR_BOLD}${CLR_WHITE}CURRENT TERMINUX STATUS${CLR_RESET}${CLR_CYAN}                                │\n"
+    printf "  │  ${CLR_BOLD}${CLR_WHITE}%-52s${CLR_RESET}${CLR_CYAN}  │\n" "CURRENT TERMINUX STATUS"
     printf "  ├────────────────────────────────────────────────────────┤\n"
-    printf "  │  ${CLR_YELLOW}[*] Active Theme:${CLR_RESET}    %-37s${CLR_CYAN}│\n" "$s_theme"
+    printf "  │  ${CLR_YELLOW}[*] Active Theme:${CLR_RESET}   %-34s${CLR_CYAN}│\n" "$s_theme"
     if [ "$s_theme" = "root" ]; then
-        printf "  │  ${CLR_RED}[*] Root Mode:${CLR_RESET}       %-37s${CLR_CYAN}│\n" "root@kali (Kali Linux replica)"
+        printf "  │  ${CLR_RED}[*] Root Mode:${CLR_RESET}      %-34s${CLR_CYAN}│\n" "root@kali (Kali Linux replica)"
     else
-        printf "  │  ${CLR_GREEN}[*] Identity:${CLR_RESET}        %-37s${CLR_CYAN}│\n" "${s_user}@${s_host}"
-        printf "  │  ${CLR_PURPLE}[*] IP Mode:${CLR_RESET}         %-37s${CLR_CYAN}│\n" "$s_ip"
+        printf "  │  ${CLR_GREEN}[*] Identity:${CLR_RESET}       %-34s${CLR_CYAN}│\n" "${s_user}@${s_host}"
+        printf "  │  ${CLR_PURPLE}[*] IP Mode:${CLR_RESET}        %-34s${CLR_CYAN}│\n" "$s_ip"
     fi
     printf "  ╰────────────────────────────────────────────────────────╯${CLR_RESET}\n\n"
 }
@@ -139,6 +139,7 @@ menu_configure_ip() {
                 printf "${CLR_BOLD}Enter custom IP address (0.0.0.0 - 255.255.255.255): ${CLR_RESET}"
                 local fake_ip
                 read -r fake_ip || fake_ip=""
+                fake_ip="$(echo "$fake_ip" | tr -d '\r\n ')"
                 [ -z "$fake_ip" ] && break
 
                 if validate_ipv4 "$fake_ip"; then
@@ -186,6 +187,7 @@ menu_configure_identity() {
     printf "Current username: [${CLR_GREEN}%s${CLR_RESET}]\n" "$(terminux_get_user)"
     printf "New username (1-10 alphanumeric chars) [leave empty to keep]: "
     read -r u_input || u_input=""
+    u_input="$(echo "$u_input" | tr -d '\r\n ')"
     if [ -n "$u_input" ]; then
         if [[ "$u_input" =~ ^[[:alnum:]_.-]{1,10}$ ]]; then
             printf '%s\n' "$u_input" > "$TERMINUX_HOME/user-name"
@@ -199,6 +201,7 @@ menu_configure_identity() {
     printf "Current hostname: [${CLR_CYAN}%s${CLR_RESET}]\n" "$(terminux_get_host)"
     printf "New hostname (1-10 alphanumeric chars) [leave empty to keep]: "
     read -r h_input || h_input=""
+    h_input="$(echo "$h_input" | tr -d '\r\n ')"
     if [ -n "$h_input" ]; then
         if [ "${#h_input}" -ge 1 ] && [ "${#h_input}" -le 10 ]; then
             printf '%s\n' "$h_input" > "$TERMINUX_HOME/host-name"
@@ -210,6 +213,7 @@ menu_configure_identity() {
 
     sleep 1.2
 }
+
 
 menu_configure_nano() {
     clear

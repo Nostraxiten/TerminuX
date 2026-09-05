@@ -3,6 +3,7 @@
 
 validate_ipv4() {
     local ip="$1"
+    ip="$(echo "$ip" | tr -d '\r\n ')"
     [ -z "$ip" ] && return 1
 
     # Split into 4 octets by dot
@@ -64,6 +65,7 @@ get_real_ip() {
     fi
 
     [ -z "$ip" ] && ip="no-wifi"
+    ip="$(echo "$ip" | tr -d '\r\n ')"
     printf '%s' "$ip"
 }
 
@@ -73,8 +75,12 @@ get_active_ip() {
     local mode="real"
     local custom_ip="192.168.1.100"
 
-    [ -f "$conf_dir/ip-mode" ] && mode="$(cat "$conf_dir/ip-mode" 2>/dev/null)"
-    [ -f "$conf_dir/custom-ip" ] && custom_ip="$(cat "$conf_dir/custom-ip" 2>/dev/null)"
+    if [ -f "$conf_dir/ip-mode" ]; then
+        mode="$(tr -d '\r\n ' < "$conf_dir/ip-mode" 2>/dev/null)"
+    fi
+    if [ -f "$conf_dir/custom-ip" ]; then
+        custom_ip="$(tr -d '\r\n ' < "$conf_dir/custom-ip" 2>/dev/null)"
+    fi
 
     case "$mode" in
         off|none|no)
@@ -92,4 +98,5 @@ get_active_ip() {
             ;;
     esac
 }
+
 

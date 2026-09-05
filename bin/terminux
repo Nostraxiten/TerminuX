@@ -105,6 +105,7 @@ case "$cmd" in
         ;;
     user)
         new_u="${2:-}"
+        new_u="$(echo "$new_u" | tr -d '\r\n ')"
         if [ -z "$new_u" ]; then
             echo "Usage: terminux user <name>"
             exit 1
@@ -115,6 +116,7 @@ case "$cmd" in
         ;;
     host)
         new_h="${2:-}"
+        new_h="$(echo "$new_h" | tr -d '\r\n ')"
         if [ -z "$new_h" ]; then
             echo "Usage: terminux host <name>"
             exit 1
