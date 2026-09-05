@@ -50,8 +50,16 @@ copy_themes_and_core() {
     cp "$ROOT_DIR/core/ip.sh" "$TERMINUX_HOME/ip.sh"
     cp "$ROOT_DIR/core/prompt_engine.sh" "$TERMINUX_HOME/prompt.sh"
     cp -r "$ROOT_DIR/core/"* "$TERMINUX_HOME/core/" 2>/dev/null || true
-    chmod +x "$TERMINUX_HOME/prompt.sh"
+    chmod +x "$TERMINUX_HOME/prompt.sh" "$TERMINUX_HOME/core/"*.sh 2>/dev/null || true
+
+    # Migrate legacy directory if exists and link it
+    if [ -d "$HOME/.noxmod" ] && [ ! -L "$HOME/.noxmod" ]; then
+        cp -rn "$HOME/.noxmod/"* "$TERMINUX_HOME/" 2>/dev/null || true
+        rm -rf "$HOME/.noxmod"
+        ln -s "$TERMINUX_HOME" "$HOME/.noxmod" 2>/dev/null || true
+    fi
 }
+
 
 apply_colors_theme() {
     local theme="${1:-yello}"

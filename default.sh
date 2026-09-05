@@ -99,8 +99,10 @@ main() {
     reload_settings
     echo
     c_ok "Termux restored to original state."
-    c_info "Run:  source ~/.bashrc  (or restart Termux) to apply changes."
+    c_info "Reloading clean terminal environment..."
+    exec bash
 }
 
 main
+
 

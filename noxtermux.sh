@@ -18,12 +18,12 @@ if [ "${1:-}" = "--install" ] || [ "${1:-}" = "-i" ]; then
     source "$SCRIPT_DIR/core/installer.sh"
     target_theme="${2:-yello}"
     full_install "$target_theme"
-    exit 0
+    exec bash
 elif [ "${1:-}" = "--theme" ] || [ "${1:-}" = "-t" ]; then
     source "$SCRIPT_DIR/core/installer.sh"
     target_theme="${2:-yello}"
     switch_theme "$target_theme"
-    exit 0
+    exec bash
 fi
 
 # Launch interactive menu if no arguments passed
@@ -32,5 +32,7 @@ if [ -f "$SCRIPT_DIR/core/menu.sh" ]; then
 else
     source "$SCRIPT_DIR/core/installer.sh"
     full_install "yello"
+    exec bash
 fi
+
 

@@ -290,10 +290,12 @@ main_menu() {
         case "$choice" in
             1)
                 local cur_theme="yello"
-                [ -f "$TERMINUX_HOME/active-theme" ] && cur_theme="$(cat "$TERMINUX_HOME/active-theme" 2>/dev/null)"
+                [ -f "$TERMINUX_HOME/active-theme" ] && cur_theme="$(tr -d '\r\n ' < "$TERMINUX_HOME/active-theme" 2>/dev/null)"
+                [ -n "$cur_theme" ] || cur_theme="yello"
                 full_install "$cur_theme"
-                printf "\nPress ENTER to continue..."
+                printf "\nPress ENTER to apply changes and reload terminal..."
                 read -r
+                exec bash
                 ;;
             2) menu_change_theme ;;
             3) menu_configure_identity ;;
@@ -311,17 +313,17 @@ main_menu() {
                 case "$conf" in
                     y|Y|s|S)
                         restore_defaults
-                        printf "\nPress ENTER to exit..."
+                        printf "\nPress ENTER to exit and reload terminal..."
                         read -r
-                        exit 0
+                        exec bash
                         ;;
                     *) c_info "Operation cancelled."; sleep 1 ;;
                 esac
                 ;;
             0|q|Q)
                 clear
-                printf "${CLR_GREEN}Goodbye! You can run '${CLR_WHITE}terminux${CLR_GREEN}' anytime.${CLR_RESET}\n\n"
-                break
+                printf "${CLR_GREEN}Changes applied! Reloading terminal environment...${CLR_RESET}\n\n"
+                exec bash
                 ;;
             *)
                 c_warn "Invalid option."
