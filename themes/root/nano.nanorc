@@ -1,0 +1,10 @@
+# === TerminuX: Colores de Nano para tema ROOT (Kali Linux) ===
+set titlecolor white,blue
+set statuscolor white,blue
+set numbercolor yellow
+set keycolor cyan
+set functioncolor green
+set selectedcolor black,blue
+set spotlightcolor black,yellow
+set errorcolor brightwhite,red
+set stripecolor ,brightblack

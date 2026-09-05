@@ -1,29 +1,14 @@
 #!/data/data/com.termux/files/usr/bin/bash
-#
-# TerminuX — RESET A DEFAULT / DESINSTALADOR
-# Quita colores, prompt, nanorc, teclas extra y atajos instalados por TerminuX
-# y restaura tu configuración previa (o el estado original de fábrica).
-# No depende de ningún otro archivo del proyecto: funciona solo.
-#
-# Uso:
-#   bash default.sh
-#
-# Autor: hecho para Nox (@nostraxiten)
+# TerminuX — Módulo de Restauración a Estado de Fábrica
 
 set -u
 
 NOXMOD_HOME="$HOME/.noxmod"
 BACKUP_ROOT="$HOME/.noxmod-backups"
 
-c_info()  { printf '\e[1;36m[*]\e[0m %s\n' "$1"; }
-c_ok()    { printf '\e[1;32m[OK]\e[0m %s\n' "$1"; }
-c_warn()  { printf '\e[1;33m[!]\e[0m %s\n' "$1"; }
-c_err()   { printf '\e[1;31m[ERROR]\e[0m %s\n' "$1"; }
-
 check_termux() {
     if [ -z "${PREFIX:-}" ] || [[ "$PREFIX" != *com.termux* ]]; then
-        c_err "This does not appear to be Termux (com.termux \$PREFIX was not detected)."
-        c_err "The script will not continue to avoid modifying another system's configuration."
+        printf '\e[1;31m[ERROR]\e[0m This does not appear to be Termux (com.termux $PREFIX was not detected).\n'
         exit 1
     fi
 }
@@ -31,34 +16,34 @@ check_termux() {
 reload_settings() {
     if command -v termux-reload-settings >/dev/null 2>&1; then
         termux-reload-settings
-        c_ok "Colors reloaded."
+        printf '\e[1;32m[OK]\e[0m Colors reloaded.\n'
     else
-        c_warn "'termux-reload-settings' was not found; close and reopen Termux to see the change."
+        printf '\e[1;33m[!]\e[0m Termux-reload-settings not found; restart Termux to apply changes.\n'
     fi
 }
 
-main() {
+restore_defaults() {
     check_termux
 
     local last_backup=""
     if [ -d "$BACKUP_ROOT" ] && [ -n "$(ls -A "$BACKUP_ROOT" 2>/dev/null)" ]; then
         last_backup="$(ls -1 "$BACKUP_ROOT" | sort | tail -n1)"
-        c_info "Restoring backup: $last_backup"
+        printf '\e[1;36m[*]\e[0m Restoring backup: %s\n' "$last_backup"
     else
-        c_warn "No NoxMod backups found; Termux will be restored to its default state (no theme, no prompt)."
+        printf '\e[1;33m[!]\e[0m No NoxMod backups found; Termux will be restored to clean default state.\n'
     fi
 
-    # Quitar el bloque que noxtermux.sh añadió a .bashrc y el alias de terminux
+    # Eliminar bloque de bashrc
     if [ -f "$HOME/.bashrc" ]; then
         sed -i '/# >>> NOXMOD_BLOCK_START/,/# <<< NOXMOD_BLOCK_END/d' "$HOME/.bashrc"
         sed -i '/alias terminux=/d' "$HOME/.bashrc"
-        c_ok "TerminuX block and aliases removed from ~/.bashrc"
+        printf '\e[1;32m[OK]\e[0m TerminuX removed from ~/.bashrc\n'
     fi
 
-    # Eliminar comando global de terminux si existe
+    # Eliminar binario de terminux
     if [ -n "${PREFIX:-}" ] && [ -f "$PREFIX/bin/terminux" ]; then
         rm -f "$PREFIX/bin/terminux"
-        c_ok "Removed \$PREFIX/bin/terminux"
+        printf '\e[1;32m[OK]\e[0m Command $PREFIX/bin/terminux removed.\n'
     fi
 
     rm -rf "$NOXMOD_HOME"
@@ -83,16 +68,18 @@ main() {
         if [ -f "$bdir/.bashrc.bak" ]; then
             cp "$bdir/.bashrc.bak" "$HOME/.bashrc"
         fi
-        c_ok "Previous configuration restored from $last_backup."
+        printf '\e[1;32m[OK]\e[0m Previous configuration restored from %s.\n' "$last_backup"
     else
         rm -f "$HOME/.termux/colors.properties" "$HOME/.termux/termux.properties" "$HOME/.nanorc"
-        c_ok "Theme files, extra keys, and nanorc removed."
+        printf '\e[1;32m[OK]\e[0m Theme files, extra keys, and nanorc removed.\n'
     fi
 
     reload_settings
     echo
-    c_ok "Termux is back to its original state before TerminuX."
-    c_info "Run:  source ~/.bashrc   (or restart Termux) to apply the change."
+    printf '\e[1;32m[OK]\e[0m Termux has been restored successfully!\n'
+    printf '\e[1;36m[*]\e[0m Run:  source ~/.bashrc  (or restart Termux).\n'
 }
 
-main
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    restore_defaults
+fi

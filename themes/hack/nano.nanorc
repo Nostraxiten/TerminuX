@@ -1,0 +1,10 @@
+# === TerminuX: Colores de Nano para tema HACK ===
+set titlecolor black,green
+set statuscolor black,brightgreen
+set numbercolor green
+set keycolor brightgreen
+set functioncolor green
+set selectedcolor black,green
+set spotlightcolor black,brightgreen
+set errorcolor brightwhite,red
+set stripecolor ,brightblack

@@ -1,0 +1,10 @@
+# === TerminuX: Colores de Nano para tema RED ===
+set titlecolor brightwhite,red
+set statuscolor white,red
+set numbercolor brightred
+set keycolor red
+set functioncolor brightwhite
+set selectedcolor black,red
+set spotlightcolor white,red
+set errorcolor brightwhite,red
+set stripecolor ,brightblack

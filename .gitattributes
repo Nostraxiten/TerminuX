@@ -1,2 +1,6 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Enforce LF normalization for shell scripts and Termux configs
+* text=auto eol=lf
+*.sh text eol=lf
+*.properties text eol=lf
+*.nanorc text eol=lf
+bin/* text eol=lf

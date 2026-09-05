@@ -1,0 +1,10 @@
+# === TerminuX: Colores de Nano para tema Space ===
+set titlecolor brightwhite,blue
+set statuscolor brightwhite,magenta
+set numbercolor cyan
+set keycolor brightcyan
+set functioncolor brightmagenta
+set selectedcolor black,cyan
+set spotlightcolor black,blue
+set errorcolor brightwhite,red
+set stripecolor ,brightblack
